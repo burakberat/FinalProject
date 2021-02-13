@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -18,7 +19,19 @@ namespace Business.Concrete
             _ProductDal = productDal;
         }
 
-        public List<Product> GetAll()
+        public IResult Add(Product product) // void : özel bir veri tipi döndürmüyor demek.
+        {
+            if (product.ProductName.Length < 2) 
+            {
+                return new ErrorResult("Ürün ismi en az 2 karaket olmalıdır.");
+            }
+
+            _ProductDal.Add(product);
+            return new Result(true,"Ürün Eklendi.");
+            //return new SuccessResult("Ürün Eklendi.");
+        }
+
+        public List<Product> GetAll()  //list döndürüyor
         {
             //iş kodları
             return _ProductDal.GetAll();
@@ -27,6 +40,11 @@ namespace Business.Concrete
         public List<Product> GetAllByCategoryId(int id)
         {
             return _ProductDal.GetAll(p => p.CategoryId == id);
+        }
+
+        public Product GetById(int productId)
+        {
+            return _ProductDal.Get(p=>p.ProductId == productId);
         }
 
         public List<Product> GetByUnitPrice(decimal min, decimal max)
