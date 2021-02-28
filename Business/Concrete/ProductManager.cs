@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.CCS;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
@@ -29,7 +30,7 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
-
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product) // void : özel bir veri tipi döndürmüyor demek.
         {
