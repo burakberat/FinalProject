@@ -45,13 +45,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
-        public IDataResult<List<Product>> GetAll()  //list döndürüyor
+        [CacheAspect]
+        public IDataResult<List<Product>> GetAll()
         {
             if (DateTime.Now.Hour == 1)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
-            //iş kodları
+            
             return new SuccessDataResult<List<Product>>(_ProductDal.GetAll(), Messages.ProductListed);
         }
 
